@@ -1,0 +1,28 @@
+<table class="mb-0 table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Sabor</th>
+            <th>Descripción</th>
+            <th>IQ</th>
+            <th>Imagen</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let cerebro of cerebros | async, let i = index">
+            <th scope="row">{{ i+1 }}</th>
+            <td>{{ cerebro.flavor }}</td>
+            <td>{{ cerebro.description }}</td>
+            <td>{{ cerebro.iq }}</td>
+            <td>{{ cerebro.picture }}</td>
+            <td>
+                <button class="btn btn-danger" (click)="eliminarCerebros(cerebro._id)"><i class="fas fa-times"></i> Eliminar</button>
+                &nbsp;
+                <button class="btn btn-success" data-toggle="modal" data-target="#modalA" (click)="obtenerCerebro(cerebro)"><i class="fas fa-edit"></i> Actualizar</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<button type="button" class="btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#modalG">
+    Agregar Cerebro
+</button>

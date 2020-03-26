@@ -1,0 +1,27 @@
+<table class="mb-0 table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Tipo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let zombie of zombies | async; let i = index">
+            <th scope="row">{{ i+1 }}</th>
+            <td>{{ zombie.name }}</td>
+            <td>{{ zombie.email }}</td>
+            <td>{{ zombie.type }}</td>
+            <td>
+                <button class="btn btn-danger" (click)="eliminarZombies(zombie._id)"><i class="fas fa-times"></i> Eliminar</button>
+                &nbsp;
+                <button class="btn btn-success" data-toggle="modal" data-target="#modalZA" (click)="obtenerZombie(zombie)"><i class="fas fa-edit"></i> Actualizar</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<button type="button" class="btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#modalZG">
+    Agregar Zombie
+</button>
