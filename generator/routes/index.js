@@ -213,7 +213,7 @@ router.post('/users/singin', passport.authenticate('local', {
 
 router.get('/users/logout', (req, res) => {
     req.logOut();
-    req.flash('success_mgs', 'Has cerrado la secion');
+    // req.flash('success_mgs', 'Has cerrado la secion');
     res.redirect('/users/singin');
 });
 
