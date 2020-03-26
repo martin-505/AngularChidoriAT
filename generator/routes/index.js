@@ -161,6 +161,8 @@ router.delete('/cerebros/delete/:id', async function(req, res) {
 });
 
 //usuario
+
+// hay que modificar los ifs
 router.get('/users/singup', (req, res) => {
     res.render('users/singup');
 });
