@@ -2,10 +2,10 @@ const { Schema, model } = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 var Usuario = new Schema({
-    name: {
+    nombre: {
         type: String,
-        minlength: [12, "La descripcion es muy corta"],
-        maxlength: [40, "El nombre es muy larga"],
+        minlength: [4, "El nombre es muy corto"],
+        maxlength: [12, "El nombre es muy largo"],
         required: [true, "El nombre es obligatorio"]
     },
     email: {
@@ -14,13 +14,12 @@ var Usuario = new Schema({
     },
     password: {
         type: String,
-        minlength: [6, "La contraseña es muy corta"],
-        maxlength: [24, "La contraseña es muy larga"],
+        minlength: [4, "La contraseña es muy corta"],
         required: [true, "La contraseña es obligatoria"]
     },
     type: {
         type: String,
-        enum: ["Administrador", "Normal"],
+        enum: ["Normal", "Administrador"],
         required: [true, "El tipo de zombie es obligatorio"]
     }
 }, {

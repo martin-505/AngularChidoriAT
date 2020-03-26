@@ -132,7 +132,7 @@ router.put('/cerebros/edit/:id', async function(req, res) {
         await cerebro.save(function(error) {
             if (error) {
                 var mensajeC = error.message;
-                res.render('/cerebros/edit', { cerebro: cerebro, mensajeErrorC: mensajeC });
+                res.render('cerebros/edit', { cerebro: cerebro, mensajeErrorC: mensajeC });
             } else {
                 res.redirect('/cerebros');
             }
@@ -170,6 +170,7 @@ router.post('/users/singup', async(req, res) => {
 
     const { nombre, type, email, password, confirm_password } = req.body;
     console.log(req.body);
+
     if (password != confirm_password) {
         errors.push({ text: 'Passwords no coinciden' });
     }
@@ -207,7 +208,7 @@ router.get('/users/singin', (req, res) => {
 
 router.post('/users/singin', passport.authenticate('local', {
     failureRedirect: '/users/singin',
-    successRedirect: '/zombies',
+    successRedirect: '/',
     failureFlash: true
 }));
 
