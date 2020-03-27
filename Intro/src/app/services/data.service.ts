@@ -1,113 +1,166 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Subject } from 'rxjs';
 
 let apiUrl = environment.apiUrl;
-
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
-    private updateZombies$ = new Subject<any>();
-    zombiesObservable = this.updateZombies$.asObservable();
+  zombieEditar: any;
+  cerebroEditar: any;
 
-    private updateCerebros$ = new Subject<any>();
-    cerebrosObservable = this.updateCerebros$.asObservable();
+  logged:boolean;
 
-    private updateUsuarios$ = new Subject<any>();
-    usuariossObservable = this.updateUsuarios$.asObservable();
+  cerebro:any;
 
-    constructor(private _client: HttpClient) { }
+  
+  
+  private updateZombies$ = new Subject<any>();
+  zombiesObservable = this.updateZombies$.asObservable();
 
-    //ZOMBIES
+  private updateCerebros$ = new Subject<any>();
+  cerebrosObservable = this.updateCerebros$.asObservable();
 
-    async obtenerZombies() {
-        let zombies = await this._client.get<any>(apiUrl + 'zombies');
-        console.log(zombies);
-        return this.updateZombies$.next(zombies);
+  
+  constructor(private _client: HttpClient) {
+   }
+   /*
+    logout(){
+     console.log('funct')
+    return this._client.get<any>(apiUrl+'logout');
+   }
+
+   getUserInfo(){
+     let user= this._client.get<any>(apiUrl+'user');
+     console.log(user);
+     return user;
+   }
+
+   auth(){
+    return this._client.get<any>(apiUrl+'auth');
+   }
+   logIn(credentials){
+      console.log(credentials);
+    return this._client.post(apiUrl+'login',credentials);
+   }
+   createUser(user){
+     console.log(user);
+    return this._client.post(apiUrl + 'signup', user);
+   }*/
+
+   //---------GET--------
+   async obtenerZombies() {
+     let zombies = await this._client.get<any>(apiUrl + 'zombies');
+     console.log(zombies);
+    return this.updateZombies$.next(zombies);
+   }
+  async obtenerCerebros() {
+     let cerebros= await this._client.get<any>(apiUrl+'cerebros');
+    return this.updateCerebros$.next(cerebros);
+   }
+
+   async getCerebro(){
+     let cerebro = await this._client.get<any>(apiUrl + 'cerebro/' + this.cerebroEditar);
+     return cerebro;
+   }
+      //---------GET--------
+
+
+
+
+      //---------------CREATE---------------------
+   agregarZombie(nombre: string, correo: string, tipo: string) {
+    let nuevoZombie = {
+      name: nombre,
+      email : correo,
+      type: tipo
     }
+      return this._client.post(apiUrl + 'zombies/new', nuevoZombie);
+   }
 
-    agregarZombie(nombre: string, correo: string, tipo: string) {
-        let nuevoZombie = {
-            nombre: nombre,
-            email: correo,
-            type: tipo
-        };
-
-        return this._client.post(apiUrl + 'zombies/new', nuevoZombie);
-
+   agregarCerebro(flavor:string,description:string,iq:number,picture:string)
+   {
+    let nuevoCerebro={
+      flavor:flavor,
+      description:description,
+      iq:iq,
+      picture:picture
     }
+    return this._client.post(apiUrl+'cerebros/new',nuevoCerebro);
+   }
 
-    eliminarZombie(ID: string) {
-        return this._client.delete(`${apiUrl}zombies/delete/${ID}`);
+    //---------------CREATE---------------------
+
+
+
+    //----------------DELETE--------------------
+   eliminarCerebro(idCerebro){
+    return this._client.delete(apiUrl+'cerebro/delete/'+idCerebro);
+   }
+
+   eliminarZombie(idZombie){
+   return this._client.delete(`${apiUrl}zombie/delete/${idZombie}`);
+   }
+   //----------------DELETE--------------------
+
+
+
+   //-----------UPDATE----------------------
+
+  actualizarCerebro(flavor:string,description:string,iq:number,picture:string, idCerebro){
+    let Cerebro ={
+      flavor:flavor,
+      description:description,
+      iq:iq,
+      picture:picture,
     }
+      return  this._client.put(apiUrl+'cerebro/edit/'+idCerebro,Cerebro);
+    
+   }
+actualizarZombie(nombre: string, correo: string, tipo: string,idZombie){
+     let Zombie={
+      name:nombre,
+      email:correo,
+      type:tipo
+     }
+     return this._client.put(apiUrl+'zombie/edit/'+idZombie,Zombie);
+   }
+  //-----------UPDATE----------------------
 
-    actualizarZombie(numero: string, nombre: string, correo: string, tipo: string) {
-        let editarZombie = {
-            nombre: nombre,
-            email: correo,
-            type: tipo
-        };
+  //--LOGIN--
 
-        return this._client.put(apiUrl + 'zombies/edit/' + numero, editarZombie);
+  //--REGISTER--
 
-    }
+  submitRegister(user:any){
+    return this._client.post(apiUrl+'register',user);
+  }
+  login(credentials:any){
+    return this._client.post(apiUrl+'login ',credentials);
+  }
 
-    //CEREBROS
+  getUserName(){
+   return this._client.get(apiUrl+'username',{
+     observe: 'body',
+     params: new HttpParams().append('token',localStorage.getItem('token'))
+   });
+  }
 
-    async obtenerCerebros() {
-        let cerebros = await this._client.get<any>(apiUrl + 'cerebros');
-        console.log(cerebros);
-        return this.updateCerebros$.next(cerebros);
-    }
 
-    agregarCerebro(sabor: string, descripcion: string, PRICE: number, imagen: string) {
-        let nuevoCerebro = {
-            flavor: sabor,
-            description: descripcion,
-            price: PRICE,
-            picture: imagen
-        };
 
-        return this._client.post(apiUrl + 'cerebros/new', nuevoCerebro);
 
-    }
 
-    eliminarCerebro(numero: string) {
-        return this._client.delete(`${apiUrl}cerebros/delete/${numero}`);
-    }
 
-    actualizarCerebro(numero: string, sabor: string, descripcion: string, PRICE: number, imagen: string) {
-        let editarCerebro = {
-            flavor: sabor,
-            description: descripcion,
-            price: PRICE,
-            picture: imagen
-        };
 
-        return this._client.put(apiUrl + 'cerebros/edit/' + numero, editarCerebro);
 
-    }
 
-    //USUARIOS
 
-    async obtenerUsuarios() {
-        let usuarios = await this._client.get<any>(apiUrl + 'users');
-        console.log(usuarios);
-        return this.updateUsuarios$.next(usuarios);
-    }
 
-    agregarUsuario(nombre: string, correo: string, contraseña: string) {
-        let nuevoUsuario = {
-            nombre: nombre,
-            email: correo,
-            password: contraseña
-        };
 
-        return this._client.post(apiUrl + 'users/new', nuevoUsuario);
 
-    }
+
 
 }
+

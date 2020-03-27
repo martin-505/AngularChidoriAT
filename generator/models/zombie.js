@@ -1,22 +1,21 @@
 var mongoose = require('mongoose');
-
 var modelSchema = mongoose.Schema({
-    nombre: {
+    name: {
         type: String,
-        minlength: [4, "El nombre es muy corto"],
-        maxlength: [12, "El nombre es muy largo"],
-        required: [true, "El nombre es obligatorio"]
+        required: ["Escriba un Nombre"],
+        minlength: [5, "El nombre es muy corto"],
+        maxlength: [12, "El nombre es muy largo"]
     },
     email: {
         type: String,
-        required: [true, "El correo electrónico es obligatorio"]
+        required: [true, "El correo electronico es obligatorio"],
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Use una direccion de email válida']
     },
     type: {
         type: String,
-        enum: ["Alumno Zombie", "Maestro Zombie"],
-        required: [true, "El tipo de zombie es obligatorio"]
+        enum: ["Alumno", "Maestro"],
+        required: ["Escoja un tipo"]
     }
 });
-
-var Zombie = mongoose.model("Zombie", modelSchema);
-module.exports = Zombie;
+var zombie = mongoose.model("zombie", modelSchema);
+module.exports = zombie;

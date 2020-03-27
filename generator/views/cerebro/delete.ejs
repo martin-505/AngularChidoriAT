@@ -1,0 +1,29 @@
+<% include ../_Header %>
+
+    <div class="col-md-4 mx-auto">
+        <div class="card text-center">
+            <div class="card-header">
+                <h3>Deñete Zombie</h3>
+            </div>
+            <div class="card-body">
+                <form action="/cerebro/delete/<%= cerebro.id%>?_method=DELETE" method="POST">
+                    <div class="form-group">
+                        <input type="text" name="description" class="form-control" value="<%= cerebro.description %>" disabled>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="flavor" class="form-control" value="<%= cerebro.flavor %>" disabled>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="price" class="form-control" value="<%= cerebro.price %>" disabled>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="picture" class="form-control" value="<%= cerebro.picture %>" disabled>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-dark"><i class="fas fa-brain"></i> Eliminar </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <% include ../_footer %>

@@ -1,13 +1,16 @@
-var express = require('express');
-var router = express.Router();
-
+let express = require('express');
+let router = express.Router();
+let User = require("../models/users");
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-    res.send('respond with a resource');
-});
-
-router.get("/chidos", function(req, res, next) {
-    res.render('alumnos', { title: 'Alumnos', alum: 'Los alumnos del B son full stack' });
+router.get('/', function(req, res) {
+    User.find().exec((error, users) => {
+        if (!error) {
+            res.status(200).json(users);
+            console.log(users);
+        } else {
+            res.status(500).json(error);
+        }
+    });
 });
 
 module.exports = router;

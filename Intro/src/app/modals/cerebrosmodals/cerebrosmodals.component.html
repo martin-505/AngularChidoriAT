@@ -1,70 +1,48 @@
-<div class="modal fade show" id="modalG" #modalG tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-modal="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar Cerebro</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
+<div class="modal fade" id="modalCerebros" #modalCerebros tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document ">
+        <div class="modal-content ">
+            <div class="modal-header ">
+                <h5 class="modal-title " id="exampleModalLabel ">Agregar Zombie</h5>
+                <button type="button " class="close " data-dismiss="modal" aria-label="Close ">
+                    <span aria-hidden="true ">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div id="alertaGuardar"></div>
-                <div class="position-relative form-group">
-                    <label for="sabor" class="">Sabor</label>
-                    <input [(ngModel)]="sabor" name="sabor" id="sabor" placeholder="Sabor" type="text" class="form-control form-control-sm">
+            <div class="modal-body ">
+                <div class="position-relative form-group ">
+                    <label for="flavor" class=" ">Flavor</label>
+                    <select [(ngModel)]="flavor" name="flavor" id="flavor" class="form-control ">
+                    <option>Vainilla</option>
+                    <option>Chicharron</option>
+                </select></div>
+                <div class="position-relative form-group ">
+                    <label for="descripion" class=" ">Description</label>
+                    <input [(ngModel)]="description" name="description" id="descripion" placeholder="Description" type="text" class="form-control">
                 </div>
-                <div class="position-relative form-group">
-                    <label for="descripcion" class="">Descripcion</label>
-                    <input [(ngModel)]="descripcion" name="descripcion" id="descripcion" placeholder="Descripcion" type="text" class="form-control form-control-sm">
+                <div class="position-relative form-group ">
+                    <label for="iq" class=" ">IQ</label>
+                    <input [(ngModel)]="iq" name="iq" id="iq" placeholder="IQ" type="number" class="form-control">
                 </div>
-                <div class="position-relative form-group">
-                    <label for="price" class="">Price</label>
-                    <input [(ngModel)]="price" name="price" id="price" placeholder="Price" type="number" class="form-control form-control-sm">
+                <div class="position-relative form-group ">
+                    <label for="picture" class=" ">Picture</label>
+                    <input [(ngModel)]="picture" name="picture" id="picture" placeholder="Picture" type="text" class="form-control">
                 </div>
-                <div class="position-relative form-group">
-                    <label for="imagen" class="">Imagen</label>
-                    <input [(ngModel)]="imagen" name="imagen" id="imagen" placeholder="Imagen" type="text" class="form-control form-control-sm">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" (click)="guardarCerebro()">Guardar Cambios</button>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="modal fade show" id="modalA" #modalA tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-modal="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Actualizar Cerebro</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
+                <div *ngIf="errorFlavor" class="mb-3 card text-white card-body bg-danger">
+                    <h5 class="text-white card-title">Name</h5>{{error.error.text.flavor.message}}</div>
+
+                <div *ngIf="errorDescription" class="mb-3 card text-white card-body bg-danger">
+                    <h5 class="text-white card-title">Email</h5>{{error.error.text.description.message}}</div>
+
+                <div *ngIf="errorIQ" class="mb-3 card text-white card-body bg-danger">
+                    <h5 class="text-white card-title">Type</h5>{{error.error.text.iq.message}}</div>
+
+                <div *ngIf="errorPicture" class="mb-3 card text-white card-body bg-danger">
+                    <h5 class="text-white card-title">Type</h5>{{error.error.text.picture.message}}</div>
+
             </div>
-            <div class="modal-body">
-                <div id="alertaActualizar"></div>
-                <div class="position-relative form-group">
-                    <label for="sabor" class="">Sabor</label>
-                    <input [(ngModel)]="saborE" name="saborE" id="saborE" type="text" class="form-control form-control-sm">
-                </div>
-                <div class="position-relative form-group">
-                    <label for="descripcion" class="">Descripcion</label>
-                    <input [(ngModel)]="descripcionE" name="descripcionE" id="descripcionE" type="text" class="form-control form-control-sm">
-                </div>
-                <div class="position-relative form-group">
-                    <label for="price" class="">Price</label>
-                    <input [(ngModel)]="priceE" name="priceE" id="priceE" type="number" class="form-control form-control-sm">
-                </div>
-                <div class="position-relative form-group">
-                    <label for="imagen" class="">Imagen</label>
-                    <input [(ngModel)]="imagenE" name="imagenE" id="imagenE" type="text" class="form-control form-control-sm">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" (click)="actualizarCerebro()">Guardar Cambios</button>
+            <div class="modal-footer ">
+                <button type="button " class="btn btn-secondary " data-dismiss="modal">Cerrar</button>
+                <button type="button " class="btn btn-primary" (click)="guardarCerebro()">Guardar Cambios</button>
             </div>
         </div>
     </div>

@@ -1,0 +1,43 @@
+<div class="modal fade" id="modalActualizarZombie" #modal2 tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document ">
+        <div class="modal-content ">
+            <div class="modal-header ">
+                <h5 class="modal-title " id="exampleModalLabel ">Actualizar Zombie</h5>
+                <button type="button " class="close " data-dismiss="modal" aria-label="Close ">
+                    <span aria-hidden="true ">&times;</span>
+                </button>
+            </div>
+            <form action="" name="editForm">
+                <div class="modal-body ">
+                    <div class="position-relative form-group ">
+                        <label for="name " class=" ">Name</label>
+                        <input [(ngModel)]="nombre" name="name " id="name " placeholder="Name " type="text " class="form-control ">
+                    </div>
+                    <div class="position-relative form-group ">
+                        <label for="email " class=" ">Email</label>
+                        <input [(ngModel)]="email" name="email " id="email " placeholder="Email " type="email " class="form-control ">
+                    </div>
+                    <div class="position-relative form-group ">
+                        <label for="type " class=" ">Type</label>
+                        <select [(ngModel)]="tipo" name="type " id="type " class="form-control ">
+                        <option>Alumno</option>
+                        <option>Maestro</option>
+                    </select></div>
+                    <div *ngIf="errorName" class="mb-3 card text-white card-body bg-danger">
+                        <h5 class="text-white card-title">Name</h5>{{error.error.text.name.message}}</div>
+
+                    <div *ngIf="errorMail" class="mb-3 card text-white card-body bg-danger">
+                        <h5 class="text-white card-title">Email</h5>{{error.error.text.email.message}}</div>
+
+                    <div *ngIf="errorType" class="mb-3 card text-white card-body bg-danger">
+                        <h5 class="text-white card-title">Type</h5>{{error.error.text.type.message}}</div>
+                </div>
+            </form>
+
+            <div class="modal-footer ">
+                <button type="button " class="btn btn-secondary " data-dismiss="modal">Cerrar</button>
+                <button type="button " class="btn btn-primary" (click)="editarZombie()">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>

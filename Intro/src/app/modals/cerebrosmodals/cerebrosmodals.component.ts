@@ -1,110 +1,62 @@
-import { Component, OnInit, ElementRef, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
 import { DataService } from 'src/app/services/data.service';
-import { CerebrosComponent } from 'src/app/cerebros/cerebros.component';
 
 @Component({
   selector: 'modal-cerebros',
   templateUrl: './cerebrosmodals.component.html',
-  styles: [],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./cerebrosmodals.component.css']
 })
-export class CerebrosmodalsComponent implements OnInit {
-    @ViewChild('modalG') public modalG: ElementRef;
-    @ViewChild('modalA') public modalA: ElementRef;
-    @ViewChild('error') public error2: ElementRef;
+export class CerebrosModalsComponent implements OnInit {
+  @ViewChild('modalCerebros') public modal: ElementRef;
+  errorFlavor: boolean;
+  errorDescription: boolean;
+  errorIQ: boolean;
+  errorPicture: boolean;
 
-    sabor: string;
-    descripcion: string;
-    price: number;
-    imagen: string;
-    ID: string;
+  error: any;
 
-    saborE: string;
-    descripcionE: string;
-    priceE: number;
-    imagenE: string;
-    IDE: string;
+  flavor: string;
+  description: string;
+  iq: number;
+  picture: string;
 
-    cerebros: any;
-    error: string;
-    trigger: string;
+  cerebros: any;
 
-    constructor( private dataService: DataService, private _renderer: Renderer2) { }
+  constructor(private dataService: DataService, private _renderer: Renderer2) { }
 
-    ngOnInit(): void {
-    }
+  ngOnInit(): void {
 
-    ngAfterContentChecked(): void {
-        this.trigger = String(CerebrosComponent.trigger);
-        console.log(this.trigger);
-        if (this.trigger === "1") {
-            this.IDE = CerebrosComponent.id.replace(/["]+/g, '');
-            this.saborE = CerebrosComponent.sabor.replace(/["]+/g, '');
-            this.descripcionE = CerebrosComponent.descripcion.replace(/["]+/g, '');
-            this.priceE = Number(CerebrosComponent.price);
-            this.imagenE = CerebrosComponent.imagen.replace(/["]+/g, '');
-            CerebrosComponent.trigger = 0;
-        }
-      }
+  }
+  guardarCerebro() {
+    this.dataService.agregarCerebro(this.flavor, this.description, this.iq, this.picture).subscribe((resultado) => {
+      console.log(resultado);
+      this._renderer.selectRootElement(this.modal.nativeElement, true).click();
+      this.dataService.obtenerCerebros();
 
-    actualizarTabla() {
-        this.dataService.cerebrosObservable
-        .subscribe((resultadoC) => {
-        this.cerebros = resultadoC;
-        });
+      this.errorDescription = false;
+      this.errorFlavor = false;
+      this.errorIQ = false;
+      this.errorPicture = false;
 
-        this.dataService.obtenerCerebros();
-    }
+      this.flavor = '';
+      this.iq = null;
+      this.picture = '';
+      this.description = '';
 
-    guardarCerebro() {
-        let al = document.getElementById('alertaGuardar');
-        al.innerHTML = '';
-        console.log(this.sabor, this.descripcion, this.price, this.imagen);
-        this.dataService.agregarCerebro(this.sabor, this.descripcion, this.price, this.imagen)
-        .subscribe((resultado) => {
-        console.log(resultado);
-        this._renderer.selectRootElement(this.modalG.nativeElement, true).click();
-        this.dataService.obtenerCerebros();
-        this.ID = '';
-        this.sabor = '';
-        this.descripcion = '';
-        this.price = 0;
-        this.imagen = '';
-        }, (error) => {
-            console.log(error);
-            al.innerHTML = al.innerHTML + "<div class='alert alert-danger alert-dismissible fade show' role='alert'>"+
-                "<strong>" + error.error.mensajeErrorC +"</strong>" +
-                "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
-                    "<span aria-hidden='true'>&times;</span>"+
-                "</button>"+
-                "</div>";
-        });
-        this.actualizarTabla();
-    }
-
-    actualizarCerebro() {
-        let al = document.getElementById('alertaActualizar');
-        al.innerHTML = '';
-        console.log(this.IDE, this.saborE, this.descripcionE, this.priceE, this.imagenE);
-        this.dataService.actualizarCerebro(this.IDE, this.saborE, this.descripcionE, this.priceE, this.imagenE)
-        .subscribe((resultado) => {
-        console.log(resultado);
-        this._renderer.selectRootElement(this.modalA.nativeElement, true).click();
-        this.dataService.obtenerCerebros();
-        CerebrosComponent.id = '0';
-        CerebrosComponent.sabor = '';
-        CerebrosComponent.descripcion = '';
-        CerebrosComponent.price = '';
-        CerebrosComponent.imagen = '';
     }, (error) => {
-        console.log(error);
-        al.innerHTML = al.innerHTML + "<div class='alert alert-danger alert-dismissible fade show' role='alert'>"+
-            "<strong>" + error.error.mensajeErrorC +"</strong>" +
-            "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
-                "<span aria-hidden='true'>&times;</span>"+
-            "</button>"+
-            "</div>";
+      this.error = error;
+      if (error.error.text.flavor) {
+        this.errorFlavor = true;
+      }
+      if (error.error.text.description) {
+        this.errorDescription = true;
+      }
+      if (error.error.text.iq) {
+        this.errorIQ = true;
+      }
+      if (error.error.text.picture) {
+        this.errorPicture = true;
+      }
     });
-    }
-
+  }
 }

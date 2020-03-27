@@ -1,52 +1,45 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from 'src/app/services/data.service';
+import { DataService } from '../services/data.service';
+import { EditCerebrosComponent } from '../modals/edit-cerebros/edit-cerebros.component';
 
 @Component({
-    selector: 'app-cerebros',
-    templateUrl: './cerebros.component.html',
-    styleUrls: ['./cerebros.component.css']
+  selector: 'app-cerebros',
+  templateUrl: 'cerebros.component.html',
+  styleUrls: ['./cerebros.component.css']
 })
 export class CerebrosComponent implements OnInit {
-    cerebros: any;
-    static id: string;
-    static sabor: string;
-    static descripcion: string;
-    static price: string;
-    static imagen: string;
-    static trigger: number;
 
-    constructor(private _dataService: DataService) { }
+  cerebros: any;
 
-    ngOnInit(): void {
-        console.log('Actualizando tabla');
-        this.actualizarTabla();
-    }
+  constructor(private _dataService: DataService) { }
 
-    actualizarTabla() {
-        this._dataService.cerebrosObservable
-        .subscribe((resultadoC) => {
-          this.cerebros = resultadoC;
-        });
+  
+  ngOnInit(): void {
+    this.actualizarTabla();
 
-        this._dataService.obtenerCerebros();
-    }
+  }
+  eliminarCerebro(idCerbro){
+    console.log(idCerbro)
+    this._dataService.eliminarCerebro(idCerbro).subscribe(function(){
+       
+    });
+    this._dataService.obtenerCerebros();
+  }
 
-    obtenerCerebro(cerebro) {
-        console.log(cerebro);
+  actualizarTabla(){
+    this._dataService.cerebrosObservable.subscribe((resultados) => {
+      this.cerebros = resultados;
+      console.log(this.cerebros);
+    });
+    this._dataService.obtenerCerebros();
+  }
 
-        CerebrosComponent.id = JSON.stringify(cerebro._id);
-        CerebrosComponent.sabor = JSON.stringify(cerebro.flavor);
-        CerebrosComponent.descripcion = JSON.stringify(cerebro.description);
-        CerebrosComponent.price = JSON.stringify(cerebro.price);
-        CerebrosComponent.imagen = JSON.stringify(cerebro.picture);
-        CerebrosComponent.trigger = 1;
-    }
+  actSeleccion(idCerebro, cerebro) {
+    this._dataService.cerebroEditar = idCerebro;
+    this._dataService.cerebro = cerebro;
 
-    eliminarCerebros(ID) {
-        console.log(ID);
-        this._dataService.eliminarCerebro(ID)
-        .subscribe((resultado) => console.log(resultado));
-        this.actualizarTabla();
-    }
+    console.log(cerebro);
+    
+  }
 
 }

@@ -1,15 +1,27 @@
-<div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
-    <app-header></app-header>
-    <app-settings></app-settings>
-    <div class="app-main">
-        <app-sidemenu></app-sidemenu>
-        <div class="app-main__outer">
-            <div class="app-main__inner">
-                <app-title></app-title>
-                <router-outlet></router-outlet>            
+<ng-container *ngIf="logged; else elseTemplate">
+    <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+
+        <app-header></app-header>
+
+        <div class="app-main">
+            <app-sidemenu></app-sidemenu>
+
+            <div class="app-main__outer">
+                <div class="app-main__inner">
+                    <app-title></app-title>
+                    <router-outlet></router-outlet>
+                </div>
             </div>
         </div>
-    </div> 
-</div>
-<modal-zombies></modal-zombies>
-<modal-cerebros></modal-cerebros>
+        <app-settings></app-settings>
+    </div>
+
+    <modal-zombies></modal-zombies>
+    <modal-cerebros></modal-cerebros>
+    <modal-edit-zombie></modal-edit-zombie>
+    <modal-edit-cerebros></modal-edit-cerebros>
+</ng-container>
+<ng-template #elseTemplate>
+    <app-login></app-login>
+    <app-register></app-register>
+</ng-template>

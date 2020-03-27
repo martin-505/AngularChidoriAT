@@ -1,219 +1,208 @@
-var express = require('express');
-const { session } = require('express-session');
-const passport = require('passport');
-var router = express.Router();
+let express = require('express');
+let router = express.Router();
+let Zombie = require("../models/zombie");
+let Cerebro = require("../models/cerebro");
+let Usuario = require("../models/users");
+let controladorUsuario = require('../controladores/userController');
+let passportConfig = require('../config/passport');
+let jwt = require('jsonwebtoken');
 
-var Zombie = require('../models/zombie');
-var Cerebro = require('../models/cerebro');
-const User = require('../models/user');
-const { isAuthenticated } = require('../config/auth');;
-
-//Zombies
-
-router.get('/zombies', isAuthenticated, async(req, res) => {
+router.get('/zombies', async(req, res) => {
     Zombie.find().exec((error, zombies) => {
         if (!error) {
-            return res.status(200).json(zombies);
+            res.status(200).json(zombies);
+            console.log(zombies);
         } else {
-            return res.status(500).json(error);
+            res.status(500).json(error);
         }
     });
 });
 
-router.post('/zombies/new', isAuthenticated, function(req, res) {
-    var data = req.body;
+router.get('/zombie/:id', async(req, res) => {
+    Zombie.findById(req.params.id).exec((error, zombie) => {
+        if (!error) {
+            res.status(200).json(zombie);
 
-    var nuevoZombie = new Zombie({
-        nombre: data.nombre,
+        } else {
+            res.status(500).json(error);
+
+        }
+    });
+});
+
+router.get('/cerebro/:id', async(req, res) => {
+    Cerebro.findById(req.params.id).exec((error, cerebro) => {
+        if (!error) {
+            res.status(200).json(cerebro);
+
+        } else {
+            res.status(500).json(error);
+
+        }
+    });
+});
+
+
+router.get('/cerebros', async function(req, res) {
+    Cerebro.find().exec((error, cerebros) => {
+        if (!error) {
+            res.status(200).json(cerebros);
+            console.log(cerebros);
+        } else {
+            res.status(500).json(error);
+        }
+    });
+});
+
+router.post('/zombies/new', function(req, res) {
+    let zombie = req;
+    let data = req.body;
+    let nuevoZombie = new Zombie({
+        name: data.name,
         email: data.email,
         type: data.type
     });
+
     nuevoZombie.save(function(error) {
+
         if (error) {
-            if (error.errors.nombre) {
-                return res.status(500).json({ mensajeError: error.errors.nombre.message, mensajeExito: '' });
-            }
-            if (error.errors.email) {
-                return res.status(500).json({ mensajeError: error.errors.email.message, mensajeExito: '' });
-            }
-            if (error.errors.type) {
-                return res.status(500).json({ mensajeError: error.errors.type.message, mensajeExito: '' });
-            }
+            res.status(500).json({ clas: 'danger', text: error.errors, mensaje: '' });
+
         } else {
-            return res.status(200).json({ mensajeError: '', mensajeExito: 'Se agregó un nuevo cerebro!' });
+            res.status(200).json({ clas: 'success', text: false, mensaje: "Zombie Registrado" });
         }
     });
 });
 
-router.delete('/zombies/delete/:id', isAuthenticated, async function(req, res) {
-    try {
-        var zombie = await Zombie.findById(req.params.id);
-        zombie.remove();
-
-        res.status(200).json({ mensajeError: '', mensajeExito: 'Se eliminó un zombie!' });
-    } catch (e) {
-        res.status(500).json({ mensajeError: e });
-    }
-});
-
-router.put('/zombies/edit/:id', async function(req, res) {
-    try {
-        var zombie = await Zombie.findById(req.params.id);
-        zombie.nombre = req.body.nombre;
-        zombie.email = req.body.email;
-        zombie.type = req.body.type;
-
-        await zombie.save(function(error) {
-            if (error) {
-                if (error.errors.nombre) {
-                    return res.status(500).json({ mensajeError: error.errors.nombre.message, mensajeExito: '' });
-                }
-                if (error.errors.email) {
-                    return res.status(500).json({ mensajeError: error.errors.email.message, mensajeExito: '' });
-                }
-                if (error.errors.type) {
-                    return res.status(500).json({ mensajeError: error.errors.type.message, mensajeExito: '' });
-                }
-            } else {
-                return res.status(200).json({ mensajeError: '', mensajeExito: 'Se agregó un nuevo zombie!' });
-            }
-        });
-
-    } catch (e) {
-        res.status(500).json({ mensajeError: e });
-    }
-});
-
-//Cerebros
-
-router.get('/cerebros', isAuthenticated, async(req, res) => {
-    Cerebro.find().exec((error, cerebros) => {
-        if (!error) {
-            return res.status(200).json(cerebros);
-        } else {
-            return res.status(500).json(error);
-        }
-    });
-});
-
-router.post('/cerebros/new', isAuthenticated, function(req, res) {
-    var dataC = req.body;
-
+router.post('/cerebros/new', function(req, res) {
+    var data = req.body;
     var nuevoCerebro = new Cerebro({
-        flavor: dataC.flavor,
-        description: dataC.description,
-        price: dataC.price,
-        picture: dataC.picture
+        flavor: data.flavor,
+        description: data.description,
+        price: data.price,
+        picture: data.picture
     });
     nuevoCerebro.save(function(error) {
+
         if (error) {
-            if (error.errors.flavor) {
-                return res.status(500).json({ mensajeErrorC: error.errors.flavor.message, mensajeExitoC: '' });
-            }
-            if (error.errors.description) {
-                return res.status(500).json({ mensajeErrorC: error.errors.description.message, mensajeExitoC: '' });
-            }
-            if (error.errors.price) {
-                return res.status(500).json({ mensajeErrorC: error.errors.price.message, mensajeExitoC: '' });
-            }
-            if (error.errors.picture) {
-                return res.status(500).json({ mensajeErrorC: error.errors.picture.message, mensajeExitoC: '' });
-            }
+            //res.send(error);
+            res.status(500).json({ clas: 'danger', text: error.errors, mensaje: '' });
+
         } else {
-            res.status(200).json({ mensajeErrorC: '', mensajeExitoC: 'Se agregó un nuevo cerebro!' });
+            res.status(200).json({ clas: 'success', text: false, mensaje: "Zombie Registrado" });
         }
     });
 });
 
-router.delete('/cerebros/delete/:id', isAuthenticated, async function(req, res) {
-    try {
-        var cerebro = await Cerebro.findById(req.params.id);
-        cerebro.remove();
-
-        res.status(200).json({ mensajeError: '', mensajeExito: 'Se eliminó un cerebro correctamente!' });
-    } catch (error) {
-        res.status(500).json({ mensajeError: e });
-    }
+router.delete('/zombie/delete/:id', async function(req, res) {
+    let zombie = await Zombie.findByIdAndDelete(req.params.id);
+    res.redirect('/');
+});
+router.delete('/cerebro/delete/:id', async function(req, res) {
+    let cerebro = await Cerebro.findByIdAndDelete(req.params.id);
+    res.redirect('/');
 });
 
-router.put('/cerebros/edit/:id', isAuthenticated, async function(req, res) {
-    try {
-        var cerebro = await Cerebro.findById(req.params.id);
-        cerebro.flavor = req.body.flavor;
-        cerebro.description = req.body.description;
-        cerebro.price = req.body.price;
-        cerebro.picture = req.body.picture;
 
-        await cerebro.save(function(error) {
-            if (error) {
-                if (error.errors.flavor) {
-                    return res.status(500).json({ mensajeErrorC: error.errors.flavor.message, mensajeExitoC: '' });
-                }
-                if (error.errors.description) {
-                    return res.status(500).json({ mensajeErrorC: error.errors.description.message, mensajeExitoC: '' });
-                }
-                if (error.errors.price) {
-                    return res.status(500).json({ mensajeErrorC: error.errors.price.message, mensajeExitoC: '' });
-                }
-                if (error.errors.picture) {
-                    return res.status(500).json({ mensajeErrorC: error.errors.picture.message, mensajeExitoC: '' });
-                }
+
+router.put('/zombie/edit/:id', async function(req, res) {
+
+    var zombie = await Zombie.findById(req.params.id);
+    zombie.name = req.body.name;
+    zombie.email = req.body.email;
+    zombie.type = req.body.type;
+
+    await zombie.save(function(error) {
+        if (error) {
+            //res.send(error);
+            res.status(500).json({ clas: 'danger', text: error.errors, mensaje: '' });
+
+        } else {
+            res.status(200).json({ clas: 'success', text: false, mensaje: "Zombie Editado" });
+        }
+    });
+});
+
+router.put('/cerebro/edit/:id', async function(req, res) {
+
+    var cerebro = await Cerebro.findById(req.params.id);
+    cerebro.flavor = req.body.flavor;
+    cerebro.description = req.body.description;
+    cerebro.price = req.body.price;
+    cerebro.picture = req.body.picture;
+
+    await cerebro.save(function(error) {
+        if (error) {
+            //res.send(error);
+            res.status(500).json({ clas: 'danger', text: error.errors, mensaje: '' });
+
+        } else {
+            res.status(200).json({ clas: 'success', text: false, mensaje: "Zombie Editado" });
+        }
+    });
+
+});
+
+
+router.post('/register', function(req, res, next) {
+    const nuevoUsuario = new Usuario({
+        username: req.body.username,
+        email: req.body.email,
+        rol: req.body.rol,
+        profileImg: req.body.profileImg,
+        password: Usuario.hashPassword(req.body.password)
+    });
+
+    let promise = nuevoUsuario.save();
+
+    promise.then(function(doc) {
+        return res.status(201).json(doc);
+    });
+
+    promise.catch(function(err) {
+        return res.status(501).json({ message: 'Error al registar usuario', err });
+    });
+});
+
+router.post('/login', function(req, res, next) {
+    let promise = Usuario.findOne({ email: req.body.email }).exec();
+
+    promise.then(function(doc) {
+        if (doc) {
+            if (doc.isValid(req.body.password)) {
+                let token = jwt.sign({ username: doc.username, rol: doc.rol, profileImg: doc.profileImg }, 'secret', { expiresIn: '3h' });
+                return res.status(200).json(token);
             } else {
-                return res.status(200).json({ mensajeErrorC: '', mensajeExitoC: 'Se agregó un nuevo cerebro!' });
+                return res.status(501).json({ message: 'Credenciales inavlidas' });
             }
-        });
+        } else {
+            return res.status(501).json({ message: 'Email no registrado' });
+        }
+    });
 
-    } catch (e) {
-        res.status(500).json({ mensajeErrorC: e });
-    }
+    promise.catch(function(err) {
+        return res.status(501).json({ message: 'Internal Error', error: err });
+    });
 });
 
-//Usuarios
-router.post('/users/singup', async(req, res) => {
-    const { nombre, type, email, password, confirm_password } = req.body;
-    const emailUser = await User.findOne({ email: email });
-    if (emailUser) {
-        return res.status(500).json({ mensajeChido: '', mensajeSad: 'El correo ya existe, seleccione otro' });
-    } else {
-        const newUser = new User({ nombre, email, type, password });
-        newUser.password = await newUser.encryptPassword(password);
-        await newUser.save(function(error) {
-            if (error) {
-                return res.status(500).json({ mensajeChido: '', mensajeSad: 'algun capo falta por llenar' });
-            }
-            if (error.errors.nombre) {
-                return res.status(500).json({ mensajeSad: error.errors.nombre.message, mensajeChido: '' });
-            }
-            if (error.errors.password !== error.errors.confirm_password) {
-                return res.status(500).json({ mensajeSad: 'las contraseñas no coinciden', mensajeChido: '' });
-            }
-            if (error.errors.password) {
-                return res.status(500).json({ mensajeSad: error.errors.password.message, mensajeChido: '' });
-            } else {
-                return res.status(200).json({ mensajeSad: '', mensajeChido: 'Se ha registrado!' });
-            }
-        });
-
-    }
-
+router.get('/username', verifyToken, function(req, res, next) {
+    return res.status(200).json(decodedToken);
 });
+var decodedToken = '';
 
-router.post('/users/singin', passport.authenticate('local', {
-    failureRedirect: '/users/singin',
-    successRedirect: '/'
-}), async(req, res) => {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email })
-    if (!user) return res.status(401).send('el correo existe');
-    if (user.password !== password) return res.status(401).send('contraseña erronea');
-});
-
-router.get('/users/logout', (req, res) => {
-    req.logOut();
-    return res.status(200).json({ mensajeChido: 'Se a cerrado la sesion', mensajeSad: '' });
-});
-
-
+function verifyToken(req, res, next) {
+    let token = req.query.token;
+    jwt.verify(token, 'secret', function(err, tokendata) {
+        if (err) {
+            return res.status(400).json({ message: 'Unauthorized Request' });
+        }
+        if (tokendata) {
+            decodedToken = tokendata;
+            console.log(tokendata);
+            next();
+        }
+    })
+}
 
 
 module.exports = router;

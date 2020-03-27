@@ -1,4 +1,5 @@
-<% include _header %>
+<% include _Header %>
+
 
     <div class="col-md-4 mx-auto">
         <div class="card text-center">
@@ -8,34 +9,55 @@
             <div class="card-body">
                 <form action="/zombies/new" method="POST">
                     <div class="form-group">
-                        <input type="text" name="nombre" class="form-control" placeholder="Nombre" autofocus>
+                        <input type="text" name="name" class="form-control" placeholder="Nombre" autofocus>
                     </div>
                     <div class="form-group">
                         <input type="email" name="email" class="form-control" placeholder="Email" autofocus>
                     </div>
                     <div class="form-group">
-                        <input type="text" name="type" class="form-control" placeholder="Tipo: Alumno Zombie o Maestro Zombie" autofocus>
+                        <input type="text" name="type" class="form-control" placeholder="Tipo: Alumno  o Maestro " autofocus>
                     </div>
-                    <% if(mensajeError.length > 0){ %>
+                    <% if(text!=false){%>
 
-                        <div class="alert alert-danger" role="alert">
-                            <%= mensajeError %>
-                        </div>
+                        <% if(text.name)
+                    {      
+                    %>
 
-                        <% } %>
+                            <div class="alert alert-<%=clas %>">
+                                <%=text.name.message %>
+                            </div>
+                            <%
+                    }
+                    %>
+                                <% if(text.email)
+                    {      
+                    %>
 
-                            <% if(mensajeExito.length > 0){ %>
-
-                                <div class="alert alert-success" role="alert">
-                                    <%= mensajeExito %>
-                                </div>
-
-                                <% } %>
-                                    <div class="form-group">
-                                        <button class="btn btn-dark">Agregar</button>
+                                    <div class="alert alert-<%=clas %>">
+                                        <%=text.email.message %>
                                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <% include _footer %>
+                                    <%
+                    }
+                    %>
+                                        <% if(text.type)
+                    {      
+                    %>
+
+                                            <div class="alert alert-<%=clas %>">
+                                                <%=text.type.message %>
+                                            </div>
+                                            <%
+                    }
+                    %>
+                                                <%}%>
+                                                    <%if(mensaje.length>0){%>
+                                                        <div class="alert alert-<%=clas %>">
+                                                            <%=mensaje %>
+                                                        </div>
+                                                        <%}%>
+
+                                                            <div class="form-group">
+                                                                <button class="btn btn-dark">Agregar</button>
+                                                            </div>
+
+                                                            <% include _footer %>
