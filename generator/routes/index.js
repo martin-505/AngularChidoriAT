@@ -1,10 +1,12 @@
 var express = require('express');
 var router = express.Router();
 const passport = require('passport');
+const session = require('express-session');
 
 var Zombie = require("../models/zombie");
 var Cerebro = require("../models/cerebro");
 var User = require('../models/user');
+const { isAuthenticated } = require('../config/auth');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

@@ -1,12 +1,16 @@
 var express = require('express');
+const { session } = require('express-session');
+const passport = require('passport');
 var router = express.Router();
 
 var Zombie = require('../models/zombie');
 var Cerebro = require('../models/cerebro');
 const User = require('../models/user');
+const { isAuthenticated } = require('../config/auth');;
+
 //Zombies
 
-router.get('/zombies', async(req, res) => {
+router.get('/zombies', isAuthenticated, async(req, res) => {
     Zombie.find().exec((error, zombies) => {
         if (!error) {
             return res.status(200).json(zombies);
@@ -16,7 +20,7 @@ router.get('/zombies', async(req, res) => {
     });
 });
 
-router.post('/zombies/new', function(req, res) {
+router.post('/zombies/new', isAuthenticated, function(req, res) {
     var data = req.body;
 
     var nuevoZombie = new Zombie({
@@ -41,7 +45,7 @@ router.post('/zombies/new', function(req, res) {
     });
 });
 
-router.delete('/zombies/delete/:id', async function(req, res) {
+router.delete('/zombies/delete/:id', isAuthenticated, async function(req, res) {
     try {
         var zombie = await Zombie.findById(req.params.id);
         zombie.remove();
@@ -82,7 +86,7 @@ router.put('/zombies/edit/:id', async function(req, res) {
 
 //Cerebros
 
-router.get('/cerebros', async(req, res) => {
+router.get('/cerebros', isAuthenticated, async(req, res) => {
     Cerebro.find().exec((error, cerebros) => {
         if (!error) {
             return res.status(200).json(cerebros);
@@ -92,7 +96,7 @@ router.get('/cerebros', async(req, res) => {
     });
 });
 
-router.post('/cerebros/new', function(req, res) {
+router.post('/cerebros/new', isAuthenticated, function(req, res) {
     var dataC = req.body;
 
     var nuevoCerebro = new Cerebro({
@@ -121,7 +125,7 @@ router.post('/cerebros/new', function(req, res) {
     });
 });
 
-router.delete('/cerebros/delete/:id', async function(req, res) {
+router.delete('/cerebros/delete/:id', isAuthenticated, async function(req, res) {
     try {
         var cerebro = await Cerebro.findById(req.params.id);
         cerebro.remove();
@@ -132,7 +136,7 @@ router.delete('/cerebros/delete/:id', async function(req, res) {
     }
 });
 
-router.put('/cerebros/edit/:id', async function(req, res) {
+router.put('/cerebros/edit/:id', isAuthenticated, async function(req, res) {
     try {
         var cerebro = await Cerebro.findById(req.params.id);
         cerebro.flavor = req.body.flavor;
@@ -167,36 +171,49 @@ router.put('/cerebros/edit/:id', async function(req, res) {
 //Usuarios
 router.post('/users/singup', async(req, res) => {
     const { nombre, type, email, password, confirm_password } = req.body;
-    console.log(req.body);
-    if (nombre.length == 0) {
-        res.render('users/singup', { mensajeChido: '', mensajeSad: 'Debe de poner el nombre' });
-    }
-    if (password != confirm_password) {
-        res.render('users/singup', { mensajeChido: '', mensajeSad: 'Las contraseñas no coinciden' });
-    }
-    if (password.length < 4) {
-        res.render('users/singup', { mensajeChido: '', mensajeSad: 'La contraseña es muy corta' });
-    }
-    if ((type.length != 6) && (type.length != 13)) {
-        res.render('users/singup', { mensajeChido: '', mensajeSad: 'Solo se puede elejir entre "Normal" o "Administrador"' });
+    const emailUser = await User.findOne({ email: email });
+    if (emailUser) {
+        return res.status(500).json({ mensajeChido: '', mensajeSad: 'El correo ya existe, seleccione otro' });
     } else {
-        const emailUser = await User.findOne({ email: email });
-        if (emailUser) {
-            res.render('users/singup', { mensajeChido: '', mensajeSad: 'El correo ya existe, seleccione otro' });
-        } else {
-            const newUser = new User({ nombre, email, type, password });
-            newUser.password = await newUser.encryptPassword(password);
-            await newUser.save(function(error) {
-                if (error) {
-                    var mensaje = error.message;
-                    res.render('users/singup', { mensajeChido: '', mensajeSad: 'algun capo falta por llenar' });
-                } else {
-                    res.render('users/singin', { mensajeChido: 'Se ha registrado!', mensajeSad: '' });
+        const newUser = new User({ nombre, email, type, password });
+        newUser.password = await newUser.encryptPassword(password);
+        await newUser.save(function(error) {
+            if (error) {
+                return res.status(500).json({ mensajeChido: '', mensajeSad: 'algun capo falta por llenar' });
+            }
+            if (error.errors.nombre) {
+                return res.status(500).json({ mensajeSad: error.errors.nombre.message, mensajeChido: '' });
+            }
+            if (error.errors.password !== error.errors.confirm_password) {
+                return res.status(500).json({ mensajeSad: 'las contraseñas no coinciden', mensajeChido: '' });
+            }
+            if (error.errors.password) {
+                return res.status(500).json({ mensajeSad: error.errors.password.message, mensajeChido: '' });
+            } else {
+                return res.status(200).json({ mensajeSad: '', mensajeChido: 'Se ha registrado!' });
+            }
+        });
 
-                }
-            });
-
-        }
     }
+
 });
+
+router.post('/users/singin', passport.authenticate('local', {
+    failureRedirect: '/users/singin',
+    successRedirect: '/'
+}), async(req, res) => {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email })
+    if (!user) return res.status(401).send('el correo existe');
+    if (user.password !== password) return res.status(401).send('contraseña erronea');
+});
+
+router.get('/users/logout', (req, res) => {
+    req.logOut();
+    return res.status(200).json({ mensajeChido: 'Se a cerrado la sesion', mensajeSad: '' });
+});
+
+
+
+
 module.exports = router;
