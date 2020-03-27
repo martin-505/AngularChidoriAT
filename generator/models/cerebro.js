@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var modelSchema = mongoose.Schema({
     description: {
         type: String,
-        minlength: [12, "La descripcion es muy corta"],
+        minlength: [6, "La descripcion es muy corta"],
         maxlength: [40, "La descripcion es muy larga"],
         required: [true, "La descripción es obligatoria"]
     },

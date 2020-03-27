@@ -3,16 +3,15 @@ var router = express.Router();
 
 var Zombie = require('../models/zombie');
 var Cerebro = require('../models/cerebro');
-var Usuario = require('../models/user');
 
 //Zombies
 
 router.get('/zombies', async(req, res) => {
     Zombie.find().exec((error, zombies) => {
         if (!error) {
-            res.status(200).json(zombies);
+            return res.status(200).json(zombies);
         } else {
-            res.status(500).json(error);
+            return res.status(500).json(error);
         }
     });
 });
@@ -28,16 +27,16 @@ router.post('/zombies/new', function(req, res) {
     nuevoZombie.save(function(error) {
         if (error) {
             if (error.errors.nombre) {
-                res.status(500).json({ mensajeError: error.errors.name.message, mensajeExito: '' });
+                return res.status(500).json({ mensajeError: error.errors.nombre.message, mensajeExito: '' });
             }
             if (error.errors.email) {
-                res.status(500).json({ mensajeError: error.errors.email.message, mensajeExito: '' });
+                return res.status(500).json({ mensajeError: error.errors.email.message, mensajeExito: '' });
             }
             if (error.errors.type) {
-                res.status(500).json({ mensajeError: error.errors.type.message, mensajeExito: '' });
+                return res.status(500).json({ mensajeError: error.errors.type.message, mensajeExito: '' });
             }
         } else {
-            res.status(200).json({ mensajeError: '', mensajeExito: 'Se agregó un nuevo cerebro!' });
+            return res.status(200).json({ mensajeError: '', mensajeExito: 'Se agregó un nuevo cerebro!' });
         }
     });
 });
@@ -63,16 +62,16 @@ router.put('/zombies/edit/:id', async function(req, res) {
         await zombie.save(function(error) {
             if (error) {
                 if (error.errors.nombre) {
-                    res.status(500).json({ mensajeError: error.errors.name.message, mensajeExito: '' });
+                    return res.status(500).json({ mensajeError: error.errors.nombre.message, mensajeExito: '' });
                 }
                 if (error.errors.email) {
-                    res.status(500).json({ mensajeError: error.errors.email.message, mensajeExito: '' });
+                    return res.status(500).json({ mensajeError: error.errors.email.message, mensajeExito: '' });
                 }
                 if (error.errors.type) {
-                    res.status(500).json({ mensajeError: error.errors.type.message, mensajeExito: '' });
+                    return res.status(500).json({ mensajeError: error.errors.type.message, mensajeExito: '' });
                 }
             } else {
-                res.status(200).json({ mensajeError: '', mensajeExito: 'Se agregó un nuevo zombie!' });
+                return res.status(200).json({ mensajeError: '', mensajeExito: 'Se agregó un nuevo zombie!' });
             }
         });
 
@@ -86,9 +85,9 @@ router.put('/zombies/edit/:id', async function(req, res) {
 router.get('/cerebros', async(req, res) => {
     Cerebro.find().exec((error, cerebros) => {
         if (!error) {
-            res.status(200).json(cerebros);
+            return res.status(200).json(cerebros);
         } else {
-            res.status(500).json(error);
+            return res.status(500).json(error);
         }
     });
 });
@@ -105,16 +104,16 @@ router.post('/cerebros/new', function(req, res) {
     nuevoCerebro.save(function(error) {
         if (error) {
             if (error.errors.flavor) {
-                res.status(500).json({ mensajeErrorC: error.errors.flavor.message, mensajeExitoC: '' });
+                return res.status(500).json({ mensajeErrorC: error.errors.flavor.message, mensajeExitoC: '' });
             }
             if (error.errors.description) {
-                res.status(500).json({ mensajeErrorC: error.errors.description.message, mensajeExitoC: '' });
+                return res.status(500).json({ mensajeErrorC: error.errors.description.message, mensajeExitoC: '' });
             }
             if (error.errors.price) {
-                res.status(500).json({ mensajeErrorC: error.errors.iq.message, mensajeExitoC: '' });
+                return res.status(500).json({ mensajeErrorC: error.errors.price.message, mensajeExitoC: '' });
             }
             if (error.errors.picture) {
-                res.status(500).json({ mensajeErrorC: error.errors.picture.message, mensajeExitoC: '' });
+                return res.status(500).json({ mensajeErrorC: error.errors.picture.message, mensajeExitoC: '' });
             }
         } else {
             res.status(200).json({ mensajeErrorC: '', mensajeExitoC: 'Se agregó un nuevo cerebro!' });
@@ -144,19 +143,19 @@ router.put('/cerebros/edit/:id', async function(req, res) {
         await cerebro.save(function(error) {
             if (error) {
                 if (error.errors.flavor) {
-                    res.status(500).json({ mensajeErrorC: error.errors.flavor.message, mensajeExitoC: '' });
+                    return res.status(500).json({ mensajeErrorC: error.errors.flavor.message, mensajeExitoC: '' });
                 }
                 if (error.errors.description) {
-                    res.status(500).json({ mensajeErrorC: error.errors.description.message, mensajeExitoC: '' });
+                    return res.status(500).json({ mensajeErrorC: error.errors.description.message, mensajeExitoC: '' });
                 }
                 if (error.errors.price) {
-                    res.status(500).json({ mensajeErrorC: error.errors.iq.message, mensajeExitoC: '' });
+                    return res.status(500).json({ mensajeErrorC: error.errors.price.message, mensajeExitoC: '' });
                 }
                 if (error.errors.picture) {
-                    res.status(500).json({ mensajeErrorC: error.errors.picture.message, mensajeExitoC: '' });
+                    return res.status(500).json({ mensajeErrorC: error.errors.picture.message, mensajeExitoC: '' });
                 }
             } else {
-                res.status(200).json({ mensajeErrorC: '', mensajeExitoC: 'Se agregó un nuevo cerebro!' });
+                return res.status(200).json({ mensajeErrorC: '', mensajeExitoC: 'Se agregó un nuevo cerebro!' });
             }
         });
 

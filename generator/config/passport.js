@@ -1,6 +1,7 @@
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
+var express = require('express');
 
 passport.use(new localStrategy({
     usernameField: 'email',
@@ -17,7 +18,7 @@ passport.use(new localStrategy({
         if (match) {
             return done(null, user);
         } else {
-            return done(null, false, { message: 'password incorrecto' });
+            return done(null, false, { mensajeTiste: 'password incorrecto' });
         }
 
     }
