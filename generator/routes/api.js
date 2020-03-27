@@ -3,7 +3,7 @@ var router = express.Router();
 
 var Zombie = require('../models/zombie');
 var Cerebro = require('../models/cerebro');
-
+const User = require('../models/user');
 //Zombies
 
 router.get('/zombies', async(req, res) => {
@@ -165,5 +165,38 @@ router.put('/cerebros/edit/:id', async function(req, res) {
 });
 
 //Usuarios
+router.post('/users/singup', async(req, res) => {
+    const { nombre, type, email, password, confirm_password } = req.body;
+    console.log(req.body);
+    if (nombre.length == 0) {
+        res.render('users/singup', { mensajeChido: '', mensajeSad: 'Debe de poner el nombre' });
+    }
+    if (password != confirm_password) {
+        res.render('users/singup', { mensajeChido: '', mensajeSad: 'Las contraseñas no coinciden' });
+    }
+    if (password.length < 4) {
+        res.render('users/singup', { mensajeChido: '', mensajeSad: 'La contraseña es muy corta' });
+    }
+    if ((type.length != 6) && (type.length != 13)) {
+        res.render('users/singup', { mensajeChido: '', mensajeSad: 'Solo se puede elejir entre "Normal" o "Administrador"' });
+    } else {
+        const emailUser = await User.findOne({ email: email });
+        if (emailUser) {
+            res.render('users/singup', { mensajeChido: '', mensajeSad: 'El correo ya existe, seleccione otro' });
+        } else {
+            const newUser = new User({ nombre, email, type, password });
+            newUser.password = await newUser.encryptPassword(password);
+            await newUser.save(function(error) {
+                if (error) {
+                    var mensaje = error.message;
+                    res.render('users/singup', { mensajeChido: '', mensajeSad: 'algun capo falta por llenar' });
+                } else {
+                    res.render('users/singin', { mensajeChido: 'Se ha registrado!', mensajeSad: '' });
 
+                }
+            });
+
+        }
+    }
+});
 module.exports = router;

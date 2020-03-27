@@ -1,7 +1,6 @@
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
-var express = require('express');
 
 passport.use(new localStrategy({
     usernameField: 'email',

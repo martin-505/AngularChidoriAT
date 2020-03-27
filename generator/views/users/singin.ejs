@@ -15,21 +15,22 @@
                         <div class="form-group">
                             <input type="password" class="form-control" name="password" placeholder="Password">
                         </div>
-                        <% if(mensajeTiste.length > 0){ %>
-                            <div class="alert alert-danger" role="alert">
-                                <%= mensajeTiste %>
-                            </div>
+                        <%= mensajeSad %>
+                            <% if(mensajeSad.length > 0){ %>
+                                <div class="alert alert-danger" role="alert">
+                                    <%= mensajeSad %>
+                                </div>
 
-                            <% } %>
+                                <% } %>
 
 
-                                <% if(mensajeChidillo.length > 0){ %>
-                                    <div class="alert alert-success" role="alert">
-                                        <%= mensajeChidillo %>
-                                    </div>
+                                    <% if(mensajeChido.length > 0){ %>
+                                        <div class="alert alert-success" role="alert">
+                                            <%= mensajeChido %>
+                                        </div>
 
-                                    <% } %>
-                                        <button class="btn btn-dark btn-block">
+                                        <% } %>
+                                            <button class="btn btn-dark btn-block">
                         SingIn
                     </button>
                     </form>

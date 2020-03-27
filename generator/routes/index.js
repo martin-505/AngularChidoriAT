@@ -203,7 +203,7 @@ router.post('/users/singup', async(req, res) => {
 });
 
 router.get('/users/singin', (req, res) => {
-    res.render('users/singin', { mensajeChidillo: '', mensajeTiste: '' });
+    res.render('users/singin', { mensajeChido: '', mensajeSad: '' });
 });
 
 router.post('/users/singin', passport.authenticate('local', {
@@ -213,7 +213,7 @@ router.post('/users/singin', passport.authenticate('local', {
 
 router.get('/users/logout', (req, res) => {
     req.logOut();
-    res.render('users/singin', { mensajeChidillo: 'Se a cerrado la sesion', mensajeTiste: '' });
+    res.render('users/singin', { mensajeChido: 'Se a cerrado la sesion', mensajeSad: '' });
 });
 
 module.exports = router;
