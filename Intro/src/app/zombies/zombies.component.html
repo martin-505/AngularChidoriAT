@@ -11,12 +11,11 @@
     <tbody>
         <tr *ngFor="let zombie of zombies | async; let i = index">
             <th scope="row">{{ i+1 }}</th>
-            <td>{{ zombie.name }}</td>
+            <td>{{ zombie.nombre }}</td>
             <td>{{ zombie.email }}</td>
             <td>{{ zombie.type }}</td>
             <td>
-                <button class="btn btn-danger" (click)="eliminarZombies(zombie._id)"><i class="fas fa-times"></i> Eliminar</button>
-                &nbsp;
+                <button class="btn btn-danger" (click)="eliminarZombies(zombie._id)"><i class="fas fa-times"></i> Eliminar</button> &nbsp;
                 <button class="btn btn-success" data-toggle="modal" data-target="#modalZA" (click)="obtenerZombie(zombie)"><i class="fas fa-edit"></i> Actualizar</button>
             </td>
         </tr>

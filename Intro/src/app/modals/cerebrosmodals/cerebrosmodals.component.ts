@@ -15,13 +15,13 @@ export class CerebrosmodalsComponent implements OnInit {
 
     sabor: string;
     descripcion: string;
-    iq: number;
+    price: number;
     imagen: string;
     ID: string;
 
     saborE: string;
     descripcionE: string;
-    iqE: number;
+    priceE: number;
     imagenE: string;
     IDE: string;
 
@@ -41,7 +41,7 @@ export class CerebrosmodalsComponent implements OnInit {
             this.IDE = CerebrosComponent.id.replace(/["]+/g, '');
             this.saborE = CerebrosComponent.sabor.replace(/["]+/g, '');
             this.descripcionE = CerebrosComponent.descripcion.replace(/["]+/g, '');
-            this.iqE = Number(CerebrosComponent.iq);
+            this.priceE = Number(CerebrosComponent.price);
             this.imagenE = CerebrosComponent.imagen.replace(/["]+/g, '');
             CerebrosComponent.trigger = 0;
         }
@@ -59,8 +59,8 @@ export class CerebrosmodalsComponent implements OnInit {
     guardarCerebro() {
         let al = document.getElementById('alertaGuardar');
         al.innerHTML = '';
-        console.log(this.sabor, this.descripcion, this.iq, this.imagen);
-        this.dataService.agregarCerebro(this.sabor, this.descripcion, this.iq, this.imagen)
+        console.log(this.sabor, this.descripcion, this.price, this.imagen);
+        this.dataService.agregarCerebro(this.sabor, this.descripcion, this.price, this.imagen)
         .subscribe((resultado) => {
         console.log(resultado);
         this._renderer.selectRootElement(this.modalG.nativeElement, true).click();
@@ -68,7 +68,7 @@ export class CerebrosmodalsComponent implements OnInit {
         this.ID = '';
         this.sabor = '';
         this.descripcion = '';
-        this.iq = 0;
+        this.price = 0;
         this.imagen = '';
         }, (error) => {
             console.log(error);
@@ -85,8 +85,8 @@ export class CerebrosmodalsComponent implements OnInit {
     actualizarCerebro() {
         let al = document.getElementById('alertaActualizar');
         al.innerHTML = '';
-        console.log(this.IDE, this.saborE, this.descripcionE, this.iqE, this.imagenE);
-        this.dataService.actualizarCerebro(this.IDE, this.saborE, this.descripcionE, this.iqE, this.imagenE)
+        console.log(this.IDE, this.saborE, this.descripcionE, this.priceE, this.imagenE);
+        this.dataService.actualizarCerebro(this.IDE, this.saborE, this.descripcionE, this.priceE, this.imagenE)
         .subscribe((resultado) => {
         console.log(resultado);
         this._renderer.selectRootElement(this.modalA.nativeElement, true).click();
@@ -94,7 +94,7 @@ export class CerebrosmodalsComponent implements OnInit {
         CerebrosComponent.id = '0';
         CerebrosComponent.sabor = '';
         CerebrosComponent.descripcion = '';
-        CerebrosComponent.iq = '';
+        CerebrosComponent.price = '';
         CerebrosComponent.imagen = '';
     }, (error) => {
         console.log(error);

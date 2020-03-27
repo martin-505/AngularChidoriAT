@@ -31,7 +31,7 @@ export class DataService {
 
     agregarZombie(nombre: string, correo: string, tipo: string) {
         let nuevoZombie = {
-            name: nombre,
+            nombre: nombre,
             email: correo,
             type: tipo
         };
@@ -46,7 +46,7 @@ export class DataService {
 
     actualizarZombie(numero: string, nombre: string, correo: string, tipo: string) {
         let editarZombie = {
-            name: nombre,
+            nombre: nombre,
             email: correo,
             type: tipo
         };
@@ -63,11 +63,11 @@ export class DataService {
         return this.updateCerebros$.next(cerebros);
     }
 
-    agregarCerebro(sabor: string, descripcion: string, IQ: number, imagen: string) {
+    agregarCerebro(sabor: string, descripcion: string, PRICE: number, imagen: string) {
         let nuevoCerebro = {
             flavor: sabor,
             description: descripcion,
-            iq: IQ,
+            price: PRICE,
             picture: imagen
         };
 
@@ -79,11 +79,11 @@ export class DataService {
         return this._client.delete(`${apiUrl}cerebros/delete/${numero}`);
     }
 
-    actualizarCerebro(numero: string, sabor: string, descripcion: string, IQ: number, imagen: string) {
+    actualizarCerebro(numero: string, sabor: string, descripcion: string, PRICE: number, imagen: string) {
         let editarCerebro = {
             flavor: sabor,
             description: descripcion,
-            iq: IQ,
+            price: PRICE,
             picture: imagen
         };
 
@@ -101,7 +101,7 @@ export class DataService {
 
     agregarUsuario(nombre: string, correo: string, contraseña: string) {
         let nuevoUsuario = {
-            name: nombre,
+            nombre: nombre,
             email: correo,
             password: contraseña
         };

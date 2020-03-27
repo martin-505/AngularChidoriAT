@@ -34,7 +34,7 @@ export class ZombiesComponent implements OnInit {
       console.log(zombie);
 
       ZombiesComponent.id = JSON.stringify(zombie._id);
-      ZombiesComponent.nombre = JSON.stringify(zombie.name);
+      ZombiesComponent.nombre = JSON.stringify(zombie.nombre);
       ZombiesComponent.correo = JSON.stringify(zombie.email);
       ZombiesComponent.tipo = JSON.stringify(zombie.type);
       ZombiesComponent.trigger = 1;

@@ -11,7 +11,7 @@ export class CerebrosComponent implements OnInit {
     static id: string;
     static sabor: string;
     static descripcion: string;
-    static iq: string;
+    static price: string;
     static imagen: string;
     static trigger: number;
 
@@ -37,7 +37,7 @@ export class CerebrosComponent implements OnInit {
         CerebrosComponent.id = JSON.stringify(cerebro._id);
         CerebrosComponent.sabor = JSON.stringify(cerebro.flavor);
         CerebrosComponent.descripcion = JSON.stringify(cerebro.description);
-        CerebrosComponent.iq = JSON.stringify(cerebro.iq);
+        CerebrosComponent.price = JSON.stringify(cerebro.price);
         CerebrosComponent.imagen = JSON.stringify(cerebro.picture);
         CerebrosComponent.trigger = 1;
     }

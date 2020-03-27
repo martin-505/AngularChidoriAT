@@ -9,34 +9,34 @@ import { isNgTemplate } from '@angular/compiler';
 })
 export class AppComponent {
     sabor = '';
-    iq = 0;
+    price = 0;
     descripcion = '';
     imagen = '';
 
     cerebros = [
     {
         sabor: 'chocolate',
-        iq: 100,
+        price: 100,
         descripcion: 'Facil de partir',
         imagen: 'chocolate.jpg'
     },
     {
-        sabor: 'fresa',
-        iq: 80,
+        sabor: 'chocolate',
+        price: 80,
         descripcion: 'Facil de tener',
         imagen: 'fresa.jpg'
     },
     {
-        sabor: 'dulce',
-        iq: 50,
+        sabor: 'vainilla',
+        price: 50,
         descripcion: 'Facil de obtener',
-        imagen: 'dulce.jpg'
+        imagen: 'hehe.jpg'
     },
     {
-        sabor: 'chicle',
-        iq: 105,
+        sabor: 'chocolate',
+        price: 105,
         descripcion: 'Facil de comer',
-        imagen: 'chicle.jpg'
+        imagen: 'hehe.jpg'
     }
 ];
 
@@ -44,7 +44,7 @@ Agregar() {
     // alert('Este botón agrega cerebros');
     const cerebro = {
         sabor: this.sabor,
-        iq: this.iq,
+        price: this.price,
         descripcion: this.descripcion,
         imagen: this.imagen
     };
@@ -52,8 +52,8 @@ Agregar() {
     this.cerebros.push(cerebro);
 }
 
-Actualizar(sabor: string, iq: number, descripcion: string, imagen: string) {
-    this.cerebros.find(item => item.sabor == sabor).iq = this.iq;
+Actualizar(sabor: string, price: number, descripcion: string, imagen: string) {
+    this.cerebros.find(item => item.sabor == sabor).price = this.price;
     this.cerebros.find(item => item.sabor == sabor).descripcion = this.descripcion;
     this.cerebros.find(item => item.sabor == sabor).imagen = this.imagen;
     console.log(this.cerebros.find(item => item.sabor == sabor));
