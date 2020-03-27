@@ -27,29 +27,6 @@ export class DataService {
   
   constructor(private _client: HttpClient) {
    }
-   /*
-    logout(){
-     console.log('funct')
-    return this._client.get<any>(apiUrl+'logout');
-   }
-
-   getUserInfo(){
-     let user= this._client.get<any>(apiUrl+'user');
-     console.log(user);
-     return user;
-   }
-
-   auth(){
-    return this._client.get<any>(apiUrl+'auth');
-   }
-   logIn(credentials){
-      console.log(credentials);
-    return this._client.post(apiUrl+'login',credentials);
-   }
-   createUser(user){
-     console.log(user);
-    return this._client.post(apiUrl + 'signup', user);
-   }*/
 
    //---------GET--------
    async obtenerZombies() {
@@ -81,12 +58,12 @@ export class DataService {
       return this._client.post(apiUrl + 'zombies/new', nuevoZombie);
    }
 
-   agregarCerebro(flavor:string,description:string,iq:number,picture:string)
+   agregarCerebro(flavor:string,description:string,price:number,picture:string)
    {
     let nuevoCerebro={
       flavor:flavor,
       description:description,
-      iq:iq,
+      price:price,
       picture:picture
     }
     return this._client.post(apiUrl+'cerebros/new',nuevoCerebro);
@@ -110,11 +87,11 @@ export class DataService {
 
    //-----------UPDATE----------------------
 
-  actualizarCerebro(flavor:string,description:string,iq:number,picture:string, idCerebro){
+  actualizarCerebro(flavor:string,description:string,price:number,picture:string, idCerebro){
     let Cerebro ={
       flavor:flavor,
       description:description,
-      iq:iq,
+      price:price,
       picture:picture,
     }
       return  this._client.put(apiUrl+'cerebro/edit/'+idCerebro,Cerebro);

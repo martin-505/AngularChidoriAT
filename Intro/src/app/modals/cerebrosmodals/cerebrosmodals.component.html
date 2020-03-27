@@ -19,8 +19,8 @@
                     <input [(ngModel)]="description" name="description" id="descripion" placeholder="Description" type="text" class="form-control">
                 </div>
                 <div class="position-relative form-group ">
-                    <label for="iq" class=" ">IQ</label>
-                    <input [(ngModel)]="iq" name="iq" id="iq" placeholder="IQ" type="number" class="form-control">
+                    <label for="price" class=" ">Price</label>
+                    <input [(ngModel)]="price" name="price" id="price" placeholder="PRICE" type="number" class="form-control">
                 </div>
                 <div class="position-relative form-group ">
                     <label for="picture" class=" ">Picture</label>
@@ -33,8 +33,8 @@
                 <div *ngIf="errorDescription" class="mb-3 card text-white card-body bg-danger">
                     <h5 class="text-white card-title">Email</h5>{{error.error.text.description.message}}</div>
 
-                <div *ngIf="errorIQ" class="mb-3 card text-white card-body bg-danger">
-                    <h5 class="text-white card-title">Type</h5>{{error.error.text.iq.message}}</div>
+                <div *ngIf="errorPRICE" class="mb-3 card text-white card-body bg-danger">
+                    <h5 class="text-white card-title">Type</h5>{{error.error.text.price.message}}</div>
 
                 <div *ngIf="errorPicture" class="mb-3 card text-white card-body bg-danger">
                     <h5 class="text-white card-title">Type</h5>{{error.error.text.picture.message}}</div>

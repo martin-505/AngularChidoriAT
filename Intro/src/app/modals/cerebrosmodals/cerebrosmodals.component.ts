@@ -10,14 +10,14 @@ export class CerebrosModalsComponent implements OnInit {
   @ViewChild('modalCerebros') public modal: ElementRef;
   errorFlavor: boolean;
   errorDescription: boolean;
-  errorIQ: boolean;
+  errorPRICE: boolean;
   errorPicture: boolean;
 
   error: any;
 
   flavor: string;
   description: string;
-  iq: number;
+  price: number;
   picture: string;
 
   cerebros: any;
@@ -28,18 +28,18 @@ export class CerebrosModalsComponent implements OnInit {
 
   }
   guardarCerebro() {
-    this.dataService.agregarCerebro(this.flavor, this.description, this.iq, this.picture).subscribe((resultado) => {
+    this.dataService.agregarCerebro(this.flavor, this.description, this.price, this.picture).subscribe((resultado) => {
       console.log(resultado);
       this._renderer.selectRootElement(this.modal.nativeElement, true).click();
       this.dataService.obtenerCerebros();
 
       this.errorDescription = false;
       this.errorFlavor = false;
-      this.errorIQ = false;
+      this.errorPRICE = false;
       this.errorPicture = false;
 
       this.flavor = '';
-      this.iq = null;
+      this.price = null;
       this.picture = '';
       this.description = '';
 
@@ -51,8 +51,8 @@ export class CerebrosModalsComponent implements OnInit {
       if (error.error.text.description) {
         this.errorDescription = true;
       }
-      if (error.error.text.iq) {
-        this.errorIQ = true;
+      if (error.error.text.price) {
+        this.errorPRICE = true;
       }
       if (error.error.text.picture) {
         this.errorPicture = true;
