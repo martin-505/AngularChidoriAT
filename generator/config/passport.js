@@ -10,7 +10,7 @@ passport.use(new localStrategy({
     //coincide el correo del usuario
     const user = await User.findOne({ email })
     if (!user) {
-        return done(null, false, { message: ' no a encontrado usuario' })
+        return done(null, false, { mensajeTiste: 'Incorrect username.' })
     } else {
         //encontro usuario
         const match = await user.matchPassword(password);

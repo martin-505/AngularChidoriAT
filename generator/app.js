@@ -13,6 +13,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+require('./config/passport');
 
 //Conexión a la base de datos
 mongoose.connect("mongodb://localhost:27017/zombie_school", {

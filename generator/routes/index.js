@@ -164,60 +164,56 @@ router.delete('/cerebros/delete/:id', async function(req, res) {
 
 // hay que modificar los ifs
 router.get('/users/singup', (req, res) => {
-    res.render('users/singup');
+    res.render('users/singup', { mensajeChido: '', mensajeSad: '' });
 });
 
 router.post('/users/singup', async(req, res) => {
-    const errors = [];
-
     const { nombre, type, email, password, confirm_password } = req.body;
     console.log(req.body);
-
+    if (nombre.length == 0) {
+        res.render('users/singup', { mensajeChido: '', mensajeSad: 'Debe de poner el nombre' });
+    }
     if (password != confirm_password) {
-        errors.push({ text: 'Passwords no coinciden' });
+        res.render('users/singup', { mensajeChido: '', mensajeSad: 'Las contraseñas no coinciden' });
     }
     if (password.length < 4) {
-        errors.push({ text: 'La contraseña es demaciado corta' });
+        res.render('users/singup', { mensajeChido: '', mensajeSad: 'La contraseña es muy corta' });
     }
-    if ((type.length != 6) && (type.length != 7)) {
-        errors.push({ text: 'en el campo tipo debe de poner si usted es alumno o maestro' });
-    }
-    if (errors.length > 0) {
-        res.render('users/singup', {
-            errors,
-            nombre,
-            email,
-            type
-        })
+    if ((type.length != 6) && (type.length != 13)) {
+        res.render('users/singup', { mensajeChido: '', mensajeSad: 'Solo se puede elejir entre "Normal" o "Administrador"' });
     } else {
         const emailUser = await User.findOne({ email: email });
         if (emailUser) {
-            req.flash('error_mgs', 'el correo es existente');
-            res.redirect('singup');
+            res.render('users/singup', { mensajeChido: '', mensajeSad: 'El correo ya existe, seleccione otro' });
         } else {
             const newUser = new User({ nombre, email, type, password });
             newUser.password = await newUser.encryptPassword(password);
-            await newUser.save();
-            req.flash('success_mgs', 'esta registrado');
-            res.redirect('/users/singin');
+            await newUser.save(function(error) {
+                if (error) {
+                    var mensaje = error.message;
+                    res.render('users/singup', { mensajeChido: '', mensajeSad: 'algun capo falta por llenar' });
+                } else {
+                    res.render('users/singin', { mensajeChido: 'Se ha registrado!', mensajeSad: '' });
+
+                }
+            });
+
         }
     }
 });
 
 router.get('/users/singin', (req, res) => {
-    res.render('users/singin');
+    res.render('users/singin', { mensajeChidillo: '', mensajeTiste: '' });
 });
 
 router.post('/users/singin', passport.authenticate('local', {
     failureRedirect: '/users/singin',
-    successRedirect: '/',
-    failureFlash: true
+    successRedirect: '/'
 }));
 
 router.get('/users/logout', (req, res) => {
     req.logOut();
-    // req.flash('success_mgs', 'Has cerrado la secion');
-    res.redirect('/users/singin');
+    res.render('users/singin', { mensajeChidillo: 'Se a cerrado la sesion', mensajeTiste: '' });
 });
 
 module.exports = router;
