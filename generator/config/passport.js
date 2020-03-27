@@ -10,14 +10,14 @@ passport.use(new localStrategy({
     //coincide el correo del usuario
     const user = await User.findOne({ email })
     if (!user) {
-        return done(null, false, { mensajeTiste: 'Incorrect username.' })
+        return done(null, false, { mensajeSad: 'Incorrect username.' })
     } else {
         //encontro usuario
         const match = await user.matchPassword(password);
         if (match) {
             return done(null, user);
         } else {
-            return done(null, false, { mensajeTiste: 'password incorrecto' });
+            return done(null, false, { mensajeSad: 'password incorrecto' });
         }
 
     }

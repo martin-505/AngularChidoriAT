@@ -5,7 +5,8 @@ helpers.isAuthenticated = (req, res, next) => {
 
         return next();
     }
-    res.render('users/singin', { mensajeChido: '', mensajeSad: 'No puedes acceder registrate' });
+    return res.status(500).json({ mensajeSad: 'No puedes acceder registrate', mensajeChido: '' });
+    // res.render('users/singin', { mensajeChido: '', mensajeSad: 'No puedes acceder registrate' });
 
 }
 module.exports = helpers;
