@@ -28,7 +28,6 @@ export class DataService {
   constructor(private _client: HttpClient) {
    }
 
-   //---------GET--------
    async obtenerZombies() {
      let zombies = await this._client.get<any>(apiUrl + 'zombies');
      console.log(zombies);
@@ -43,12 +42,7 @@ export class DataService {
      let cerebro = await this._client.get<any>(apiUrl + 'cerebro/' + this.cerebroEditar);
      return cerebro;
    }
-      //---------GET--------
 
-
-
-
-      //---------------CREATE---------------------
    agregarZombie(nombre: string, correo: string, tipo: string) {
     let nuevoZombie = {
       name: nombre,
@@ -68,12 +62,6 @@ export class DataService {
     }
     return this._client.post(apiUrl+'cerebros/new',nuevoCerebro);
    }
-
-    //---------------CREATE---------------------
-
-
-
-    //----------------DELETE--------------------
    eliminarCerebro(idCerebro){
     return this._client.delete(apiUrl+'cerebro/delete/'+idCerebro);
    }
@@ -81,11 +69,6 @@ export class DataService {
    eliminarZombie(idZombie){
    return this._client.delete(`${apiUrl}zombie/delete/${idZombie}`);
    }
-   //----------------DELETE--------------------
-
-
-
-   //-----------UPDATE----------------------
 
   actualizarCerebro(flavor:string,description:string,price:number,picture:string, idCerebro){
     let Cerebro ={
@@ -105,11 +88,7 @@ actualizarZombie(nombre: string, correo: string, tipo: string,idZombie){
      }
      return this._client.put(apiUrl+'zombie/edit/'+idZombie,Zombie);
    }
-  //-----------UPDATE----------------------
 
-  //--LOGIN--
-
-  //--REGISTER--
 
   submitRegister(user:any){
     return this._client.post(apiUrl+'register',user);
