@@ -1,8 +1,4 @@
-<h1 align=center>Listado de Zombies en Inglés</h1>
-<button type="button" class="btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#modal" style="float: right;">
-    Agregar Zombie
-</button>
-<br>
+
 <div class="card-body">
     <h5 class="card-title">Zombies</h5>
     <table class="mb-0 table">
@@ -21,11 +17,13 @@
                 <td>{{zombie.name}}</td>
                 <td>{{zombie.email}}</td>
                 <td>{{zombie.type}}</td>
-                <td><button type="button " class="btn btn-primary" (click)="eliminarZombie(zombie._id)">Borrar</button>
-                    <button type="button" class="btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#modalActualizarZombie" (click)="actSeleccion(zombie._id)" style="margin:7px;">Actualizar</button></td>
+                <td><button type="button " class="btn btn-danger" (click)="eliminarZombie(zombie._id)"><i class="fas fa-times"></i> Borrar</button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalActualizarZombie" (click)="actSeleccion(zombie._id)" style="margin:7px;"><i class="fas fa-edit"></i> Actualizar</button></td>
             </tr>
         </tbody>
     </table>
-
+    <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#modal" style="float: left;">
+    Agregar Zombie
+    </button>
 
 </div>

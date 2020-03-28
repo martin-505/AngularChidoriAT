@@ -19,7 +19,7 @@ var modelSchema = new Schema({
     },
     rol: {
         type: String,
-        enum: ['Creator', 'Developer', 'Designer'],
+        enum: ['Creator', 'Designer'],
         required: "Seleccione un Rol"
     },
     profileImg: {
